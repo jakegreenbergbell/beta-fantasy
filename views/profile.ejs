@@ -1,0 +1,88 @@
+<!-- views/profile.ejs -->
+<!doctype html>
+<html>
+<head>
+    <title>Beta Fantasy</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <style>
+        body    {
+                  padding-top:80px;
+                  word-wrap:break-word;
+                }
+
+        .well{    position: absolute;
+                  right: 10px;
+                  top: 10px;
+                  padding: 10px;
+                  background-color: transparent;
+                  max-width: 250px;
+                  border: 4px solid #e3e3e3;}
+
+        .text-danger  {
+          margin: 0px;
+        }
+
+        h1{
+          position:absolute;
+          top: 10px;
+          font-size: 48px;
+          text-shadow: 2px 2px #ff0000;
+        }
+        img{
+          height:100%;
+          width:100%;
+          opacity: 0.5;
+          position: absolute;
+          z-index: -1;
+          top: 0px;
+        }
+    </style>
+</head>
+<body>
+
+  <img src="images/background.jpg" height="100%" width="100%" id="background">
+  <div class="container">
+
+
+        <h1>Welcome to Beta Fantasy</h1>
+
+<div class="container">
+
+
+    <div class="row">
+
+        <!-- LOCAL INFORMATION -->
+        <% if(user.google.token == undefined){ %>
+            <div class="well">
+                <h3><span class="fa fa-user"></span> Signed In</h3>
+
+                    <p>
+                        <strong>username</strong>: <%= user.local.email %><br>
+                        <strong>password</strong>: <%= user.local.password %><br>
+                        <a href="/logout" class="btn btn-default btn-sm">Logout</a><br>
+                    </p>
+
+            </div>
+        <% } %>
+
+    <!-- GOOGLE INFORMATION -->
+    <% if (user.google.token !== undefined){ %>
+
+        <div class="well">
+            <h3 class="text-danger"><span class="fa fa-google-plus"></span> Google</h3>
+
+                <p>
+                    <strong>id</strong>: <%= user.google.id %><br>
+                    <strong>email</strong>: <%= user.google.email %><br>
+                    <strong>name</strong>: <%= user.google.name %>
+                    <a href="/logout" class="btn btn-default btn-sm">Logout</a><br>
+                </p>
+
+        </div>
+<% } %>
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!-- views/index.ejs -->
+<!doctype html>
+<html>
+<head>
+    <title>Beta Fantasy</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
+    <style>
+        body        { padding-top:80px; }
+        #loginButtons {
+            right: 10px;
+            position: absolute;
+            top: 10px;
+        }
+        h1{
+          position:absolute;
+          top: 10px;
+          font-size: 48px;
+          text-shadow: 2px 2px #ff0000;
+        }
+        img{
+          height:100%;
+          width:100%;
+          opacity: 0.5;
+          position: absolute;
+          z-index: -1;
+          top: 0px;
+        }
+           </style>
+</head>
+<body>
+<img src="images/background.jpg" height="100%" width="100%" id="background">
+<div class="container">
+
+
+      <h1>Welcome to Beta Fantasy</h1>
+
+        <div id="loginButtons">
+
+        <p>Login or Register with:</p>
+        <a href="/auth/google" class="btn btn-danger"><span class="fa fa-google-plus"></span> Google</a>
+
+        <a href="/login" class="btn btn-default"><span class="fa fa-user"></span> Local Login</a>
+        <a href="/signup" class="btn btn-default"><span class="fa fa-user"></span> Local Signup</a>
+      </div>
+</div>
+</body>
+</html>
