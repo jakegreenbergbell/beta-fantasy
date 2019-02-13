@@ -7,10 +7,26 @@
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
     <style>
         body        { padding-top:80px; }
+        img{
+          height:100%;
+          width:100%;
+          opacity: 0.5;
+          position: absolute;
+          z-index: -1;
+          top: 0px;
+        }
+        #box{
+          width: 650px;
+          background-color: rgba(255,255,255, 0.6);
+          border-style: solid;
+          border-radius: 20px;
+        }
     </style>
 </head>
 <body>
-<div class="container">
+  <img src="images/background.jpg" height="100%" width="100%" id="background">
+
+<div class="container" id="box">
 
 <div class="col-sm-6 col-sm-offset-3">
 

@@ -1,4 +1,9 @@
 // app/routes.js
+
+var Data            = require('../app/models/data');
+var User            = require('../app/models/user');
+var Climber            = require('../app/models/climber');
+
 module.exports = function(app, passport) {
 
     // =====================================
@@ -48,12 +53,62 @@ module.exports = function(app, passport) {
     // we will want this protected so you have to be logged in to visit
     // we will use route middleware to verify this (the isLoggedIn function)
     app.get('/profile', isLoggedIn, function(req, res) {
-        console.log(req.user.id)
-        console.log(req.user.id)
-        console.log(req.user)
-        res.render('profile.ejs', {
-            user : req.user // get the user out of session and pass to template
-        });
+
+      Climber.find({}, function(err, climber) {
+        if (err) throw err;
+        res.render('profile.ejs', {climber:climber, user:req.user});
+      });
+
+    });
+
+    app.post('/addClimberToTeam', isLoggedIn, function(req, res){
+      console.log(req.body)
+      req.body.cimberId
+      Data.findOne({ 'username' :  req.body.currentUsername }, function(err, user) {
+          if (err)
+              return done(err);
+
+          // if no user is found, return the message
+          if (!user){
+            var tier = "tier" + req.body.tier
+
+            Data.create({ "username":req.body.currentUsername, tier: req.body.climberId},
+             function (err, small) {
+              if (err) return handleError(err);
+              console.log(small);
+            });
+
+            Data.findOne({ 'username' :  req.body.currentUsername }, function(err, user2) {
+              console.log(user2)
+              var tier = "tier" + req.body.tier
+              user2["tier" + req.body.tier].push(req.body.climberId)
+              Data.findOneAndUpdate(
+                { 'username' :  req.body.currentUsername },
+              user2,
+               function(error,success){
+                 if (err){console.log("failed")}
+                 else{return console.log("succesfully saved");}
+              })
+              // all is well, return successful user
+            })
+          }
+          // if the user is found but the password is wrong
+          if (user){
+            var tier = "tier" + req.body.tier
+            user["tier" + req.body.tier].push(req.body.climberId)
+            Data.findOneAndUpdate(
+              { 'username' :  req.body.currentUsername },
+            user,
+             function(error,success){
+               if (err){console.log("failed")}
+               else{return console.log("succesfully saved");}
+            })
+            // all is well, return successful user
+          }
+      });
+
+      res.redirect('/profile')
+
     });
 
     // =====================================

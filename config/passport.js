@@ -5,7 +5,10 @@ var LocalStrategy   = require('passport-local').Strategy;
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 // load up the user model
+var Data            = require('../app/models/user');
 var User            = require('../app/models/user');
+var Climber            = require('../app/models/user');
+
 
 var configAuth = require('./auth');
 

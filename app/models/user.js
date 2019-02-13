@@ -9,7 +9,9 @@ var userSchema = mongoose.Schema({
     local            : {
         email        : String,
         password     : String,
-        team : Array,
+        tier1 : Array,
+        tier2 : Array,
+        tier3 : Array,
         league : Array
     },
     google           : {
@@ -17,7 +19,9 @@ var userSchema = mongoose.Schema({
         token        : String,
         email        : String,
         name         : String,
-        team : Array,
+        tier1 : Array,
+        tier2 : Array,
+        tier3 : Array,
         league : Array
     }
 
