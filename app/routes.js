@@ -2,7 +2,7 @@
 
 var Data            = require('../app/models/data');
 var User            = require('../app/models/user');
-var Climber            = require('../app/models/climber');
+var Climber         = require('../app/models/climber');
 
 module.exports = function(app, passport) {
 
@@ -54,62 +54,89 @@ module.exports = function(app, passport) {
     // we will use route middleware to verify this (the isLoggedIn function)
     app.get('/profile', isLoggedIn, function(req, res) {
 
-      Climber.find({}, function(err, climber) {
-        if (err) throw err;
-        res.render('profile.ejs', {climber:climber, user:req.user});
-      });
+      console.log("Google Email:" + req.user.google.email)
+      console.log("Local Email:" + req.user.local.email)
 
-    });
+      //made a global user name var here - good idea to
+      //make one and use throughout - this works in nested functions
+      //which was your problem before
+      // maybe make sense to make the global "req.user" instead of the email?
+      user_master = req.user.local.email || req.user.google.email
+      var myData = true;
+      Data.findOne({ 'username' :  user_master }, function(err, userData) {
+          if (err) return done(err);
+          if (!userData){
+            Data.create({ username: user_master }, function (err, newUserData) {
+              if (err) return handleError(err);
+              myData = newUserData;
+            });
+          }else{
+            myData = userData;
+          }
+          Climber.find({}, function(err, climber) {
+            if (err) throw err;
+            res.render('profile.ejs', {climber:climber, user:req.user, data:myData});
+          });
+        })
+      })
 
     app.post('/addClimberToTeam', isLoggedIn, function(req, res){
-      console.log(req.body)
-      req.body.cimberId
-      Data.findOne({ 'username' :  req.body.currentUsername }, function(err, user) {
-          if (err)
-              return done(err);
-
-          // if no user is found, return the message
-          if (!user){
-            var tier = "tier" + req.body.tier
-
-            Data.create({ "username":req.body.currentUsername, tier: req.body.climberId},
-             function (err, small) {
-              if (err) return handleError(err);
-              console.log(small);
-            });
-
-            Data.findOne({ 'username' :  req.body.currentUsername }, function(err, user2) {
-              console.log(user2)
-              var tier = "tier" + req.body.tier
-              user2["tier" + req.body.tier].push(req.body.climberId)
-              Data.findOneAndUpdate(
-                { 'username' :  req.body.currentUsername },
-              user2,
-               function(error,success){
-                 if (err){console.log("failed")}
-                 else{return console.log("succesfully saved");}
-              })
-              // all is well, return successful user
-            })
-          }
-          // if the user is found but the password is wrong
+      allInfo = req.body;
+      Data.findOne({ 'username' :  allInfo.currentUsername }, function(err, user) {
+          if (err) console.log("error")
           if (user){
-            var tier = "tier" + req.body.tier
-            user["tier" + req.body.tier].push(req.body.climberId)
+            console.log(user["tier" + allInfo.tier].length)
+            if(user["tier" + allInfo.tier].length>2){
+              user["tierFull" + allInfo.tier] = true;
+              console.log(user["tierFull" + allInfo.tier])
+            }
+            tier = "tier" + allInfo.tier
+            user[tier].push(allInfo.climberId)
+            console.log(user)
             Data.findOneAndUpdate(
-              { 'username' :  req.body.currentUsername },
+              { 'username' :  allInfo.currentUsername },
             user,
              function(error,success){
                if (err){console.log("failed")}
-               else{return console.log("succesfully saved");}
             })
-            // all is well, return successful user
           }
       });
-
       res.redirect('/profile')
 
     });
+
+    climbersArray = {
+          tier1 : [],
+          tier2 : [],
+          tier3 : []
+        }
+
+
+    app.post("/myTeam", isLoggedIn, function(req, res){
+      Data.findOne({ 'username' :  req.body.currentUsername }, function(err, user) {
+          if(err){console.log("shit")}
+          else{
+            for(var i = 1; i <= 3; i++){
+                for(var j =0; j < user["tier" + i].length; j++){
+                  var stringI = parseInt(i)
+                  var tier = "tier" + stringI
+                  findById(user[tier][j], tier)
+                }
+              }
+            }
+          })
+
+          setTimeout(function() {
+            console.log(climbersArray)
+            res.render('myTeam.ejs', {user:req.user, climber:climbersArray});
+          }, 1500)
+      })
+
+      function findById(id,tier){
+          Climber.findById(id, function(err, climber){
+            climbersArray[tier].push(climber);
+          });
+      }
 
     // =====================================
     // LOGOUT ==============================

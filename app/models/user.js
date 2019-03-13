@@ -9,20 +9,12 @@ var userSchema = mongoose.Schema({
     local            : {
         email        : String,
         password     : String,
-        tier1 : Array,
-        tier2 : Array,
-        tier3 : Array,
-        league : Array
     },
     google           : {
         id           : String,
         token        : String,
         email        : String,
         name         : String,
-        tier1 : Array,
-        tier2 : Array,
-        tier3 : Array,
-        league : Array
     }
 
 });

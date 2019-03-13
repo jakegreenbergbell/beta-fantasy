@@ -90,21 +90,24 @@
 </head>
 <body>
 
+  <% if(user.google.token == undefined){ var email = user.local.email } %>
+  <% if (user.google.token !== undefined){  var email = user.google.email }%>
+
   <img src="images/background.jpg" height="100%" width="100%" id="background">
 
 
 <div class="container">
   <table class="table table-dark" id="header">
  <tr>
-    <td style="border-top: none"><form method="get" action="/myTeam">
-              <input type="submit" value="My Team" class="header-buttons"></form></td>
+    <td style="border-top: none"><form method="post" action="/myTeam">
+              <input type="hidden" name="currentUsername" value="<%= email %>">
+              <input type="submit" value="My Team" class="header-buttons">
+            </form></td>
     <td style="border-top: none"><button class="header-buttons">View Climbers</button></td>
     <td style="border-top: none"><button class="header-buttons">Groups</button></td>
   </tr>
 </table>
-
         <h1>Welcome to Beta Fantasy</h1>
-
 </div>
 
     <div class="row">
@@ -158,7 +161,10 @@
           <input type="hidden" name="climberId" value="<%= climber[i]._id %>">
           <input type="hidden" name="tier" value="<%= climber[i].tier %>">
           <input type="hidden" name="currentUsername" value="<%= email %>">
-          <input class="plusButton"type="submit" value="+"></form></td>
+          <input class="plusButton"type="submit" value="+"
+              <%if(data["tierFull" + climber[i].tier] == true){%>
+                style="background-color:white" disabled 
+                <%}%> ></form></td>
       </tr>
 <% } %>
 
