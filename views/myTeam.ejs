@@ -52,7 +52,7 @@
           background-color: #302F30;
           }
         .header-buttons:hover{
-          color: #ad282a;
+          color: black;
           border-radius: 25px;
           background-color: white;
         }
@@ -66,8 +66,13 @@
         }
         .plusButton{
           border-radius: 8px;
-          color: white;
+          color: black;
           }
+          .minusButton{
+            border-radius: 8px;
+            background-color: crimson;
+            color: white;
+            }
           .scrollable{
             max-height: 300px;
             overflow: scroll;
@@ -75,9 +80,24 @@
         .text-danger  {
           margin: 0px;
         }
+        .tierHeading{
+          font-style: italic;
+          font-size: 20px;
+        }
         #tier1Table{
-          top: 100px;
+          top: 133px;
           position: relative;
+          left: 10%;
+        }
+        #tier2Table{
+          top: 171px;
+          position: relative;
+          left: 10%;
+        }
+        #tier3Table{
+          top: -122px;
+          position: relative;
+          left: 55%;
         }
         .well{
           position: absolute;
@@ -141,37 +161,79 @@
         </div>
 <% } %>
 <table  id="tier1Table">
+  <tr>
+    <th class="tierHeading">Tier1</th>
+  </tr>
+  <tr class="climberRow">
+    <th class="climberTableCell">First name</th>
+    <th class="climberTableCell">Last name</th>
+    <th class="climberTableCell">Nationality</th>
+    <th class="climberTableCell">2018 ranking</th>
+    <th class="climberTableCell">Remove</th>
+  </tr>
 <%for(var i = 0; i<climber.tier1.length;i++){ %>
  <tr class="climberRow">
     <td class="climberTableCell"><%= climber.tier1[i].firstname %></td>
     <td class="climberTableCell"><%= climber.tier1[i].lastname %></td>
-    <td class="climberTableCell"><%= climber.tier1[i].tier %></td>
     <td class="climberTableCell"><%= climber.tier1[i].nationality %></td>
     <td class="climberTableCell"><%= climber.tier1[i].rank %></td>
+    <th><form method="post" action="/addClimberToTeam">
+      <input type="hidden" name="climberId" value="<%= climber.tier1[i]._id %>">
+      <input type="hidden" name="tier" value="<%= climber.tier1[i].tier %>">
+      <input type="hidden" name="currentUsername" value="<%= email %>">
+      <input class="minusButton"type="submit" value="-"></form></th>
   </tr>
 <% } %>
 </table>
 
-<table>
+<table id="tier2Table">
+  <tr>
+    <th class="tierHeading">Tier2</th>
+  </tr>
+  <tr class="climberRow">
+    <th class="climberTableCell">First name</th>
+    <th class="climberTableCell">Last name</th>
+    <th class="climberTableCell">Nationality</th>
+    <th class="climberTableCell">2018 ranking</th>
+    <th class="climberTableCell">Remove</th>
+
 <%for(var i = 0; i<climber.tier2.length;i++){ %>
  <tr class="climberRow">
     <td class="climberTableCell"><%= climber.tier2[i].firstname %></td>
     <td class="climberTableCell"><%= climber.tier2[i].lastname %></td>
-    <td class="climberTableCell"><%= climber.tier2[i].tier %></td>
     <td class="climberTableCell"><%= climber.tier2[i].nationality %></td>
     <td class="climberTableCell"><%= climber.tier2[i].rank %></td>
+    <th><form method="post" action="/addClimberToTeam">
+      <input type="hidden" name="climberId" value="<%= climber.tier2[i]._id %>">
+      <input type="hidden" name="tier" value="<%= climber.tier2[i].tier %>">
+      <input type="hidden" name="currentUsername" value="<%= email %>">
+      <input class="minusButton"type="submit" value="-"></form></th>
   </tr>
 <% } %>
-</table>
+</table id="tier3Table">
 
-<table>
+<table id="tier3Table">
+  <tr>
+    <th class="tierHeading">Tier3</th>
+  </tr>
+  <tr class="climberRow">
+    <th class="climberTableCell">First name</th>
+    <th class="climberTableCell">Last name</th>
+    <th class="climberTableCell">Nationality</th>
+    <th class="climberTableCell">2018 ranking</th>
+    <th class="climberTableCell">Remove</th>
+  </tr>
 <%for(var i = 0; i<climber.tier3.length;i++){ %>
  <tr class="climberRow">
     <td class="climberTableCell"><%= climber.tier3[i].firstname %></td>
     <td class="climberTableCell"><%= climber.tier3[i].lastname %></td>
-    <td class="climberTableCell"><%= climber.tier3[i].tier %></td>
     <td class="climberTableCell"><%= climber.tier3[i].nationality %></td>
     <td class="climberTableCell"><%= climber.tier3[i].rank %></td>
+    <th><form method="post" action="/addClimberToTeam">
+      <input type="hidden" name="climberId" value="<%= climber.tier3[i]._id %>">
+      <input type="hidden" name="tier" value="<%= climber.tier3[i].tier %>">
+      <input type="hidden" name="currentUsername" value="<%= email %>">
+      <input class="minusButton"type="submit" value="-"></form></th>
   </tr>
 <% } %>
 </table>

@@ -89,6 +89,8 @@ module.exports = function(app, passport) {
             if(user["tier" + allInfo.tier].length>2){
               user["tierFull" + allInfo.tier] = true;
               console.log(user["tierFull" + allInfo.tier])
+            }else{
+              user["tierFull" + allInfo.tier] = false;
             }
             tier = "tier" + allInfo.tier
             user[tier].push(allInfo.climberId)
@@ -113,6 +115,11 @@ module.exports = function(app, passport) {
 
 
     app.post("/myTeam", isLoggedIn, function(req, res){
+      climbersArray = {
+            tier1 : [],
+            tier2 : [],
+            tier3 : []
+          }
       Data.findOne({ 'username' :  req.body.currentUsername }, function(err, user) {
           if(err){console.log("shit")}
           else{
