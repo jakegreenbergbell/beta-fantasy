@@ -1,0 +1,20 @@
+<% if(climbersOnTeam.indexOf(climber[i].id) == -1){ %>
+<input class="plusButton" type="submit" value="+"
+    <% if(data["tierFull" + climber[i].tier] == true){ %>
+      style="background-color:white" disabled
+      <%}%> ></form></td>
+<% }else{ %>
+
+climbersOnTeam.indexOf(climber[i]._id) == -1
+
+
+          <% }else{ %>
+            <th><form method="post" action="/removeClimberFromTeam">
+              <input type="hidden" name="climberId" value="<%= climber[i]._id %>">
+              <input type="hidden" name="tier" value="<%= climber[i].tier %>">
+              <input type="hidden" name="currentUsername" value="<%= email %>">
+              <input class="minusButton"type="submit" value="-"></form></th>
+        <% } %>
+
+
+        <td style="border-top: none"><button class="header-buttons">Groups</button></td>

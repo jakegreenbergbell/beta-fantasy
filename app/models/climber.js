@@ -7,7 +7,8 @@ var climberSchema = mongoose.Schema({
         lastname: String,
         tier : String,
         nationality: String,
-        rank: Number
+        rank: Number,
+        score: Number
 });
 
 var Climber = mongoose.model('Climber', climberSchema);

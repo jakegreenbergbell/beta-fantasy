@@ -6,17 +6,10 @@ var Climber         = require('../app/models/climber');
 
 module.exports = function(app, passport) {
 
-    // =====================================
-    // HOME PAGE (with login links) ========
-    // =====================================
     app.get('/', function(req, res) {
         res.render('index.ejs'); // load the index.ejs file
     });
 
-    // =====================================
-    // LOGIN ===============================
-    // =====================================
-    // show the login form
     app.get('/login', function(req, res) {
 
         // render the page and pass in any flash data if it exists
@@ -25,15 +18,11 @@ module.exports = function(app, passport) {
 
     // process the login form
     app.post('/login', passport.authenticate('local-login', {
-        successRedirect : '/profile', // redirect to the secure profile section
+        successRedirect : '/addClimbers', // redirect to the secure profile section
         failureRedirect : '/login', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
     }));
 
-    // =====================================
-    // SIGNUP ==============================
-    // =====================================
-    // show the signup form
     app.get('/signup', function(req, res) {
 
         // render the page and pass in any flash data if it exists
@@ -42,25 +31,27 @@ module.exports = function(app, passport) {
 
     // process the signup form
     app.post('/signup', passport.authenticate('local-signup', {
-        successRedirect : '/profile', // redirect to the secure profile section
+        successRedirect : '/addClimbers', // redirect to the secure profile section
         failureRedirect : '/signup', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
     }));
+    app.post('/addClimbers', function(req,res){
+      user_master = req.user.local.email || req.user.google.email
+      allInfo = req.body;
+      var userData = true;
+      Data.findOne({ 'username' :  allInfo.currentUsername }, function(err, user) {
+          userData = user;
+      Climber.find({}, function(err, climber) {
+        // console.log("user=" + req.user)
+        // console.log("climber=" + climber)
+        // console.log("userData=" + userData)
+        res.render("addClimbers.ejs", {user:req.user, climber:climber, data:userData})
+        })
+      })
+    })
 
-    // =====================================
-    // PROFILE SECTION =====================
-    // =====================================
-    // we will want this protected so you have to be logged in to visit
-    // we will use route middleware to verify this (the isLoggedIn function)
-    app.get('/profile', isLoggedIn, function(req, res) {
+    app.get('/addClimbers', isLoggedIn, function(req, res) {
 
-      console.log("Google Email:" + req.user.google.email)
-      console.log("Local Email:" + req.user.local.email)
-
-      //made a global user name var here - good idea to
-      //make one and use throughout - this works in nested functions
-      //which was your problem before
-      // maybe make sense to make the global "req.user" instead of the email?
       user_master = req.user.local.email || req.user.google.email
       var myData = true;
       Data.findOne({ 'username' :  user_master }, function(err, userData) {
@@ -75,7 +66,7 @@ module.exports = function(app, passport) {
           }
           Climber.find({}, function(err, climber) {
             if (err) throw err;
-            res.render('profile.ejs', {climber:climber, user:req.user, data:myData});
+            res.render('addClimbers.ejs', {climber:climber, user:req.user, data:myData});
           });
         })
       })
@@ -103,8 +94,34 @@ module.exports = function(app, passport) {
             })
           }
       });
-      res.redirect('/profile')
+      res.redirect('/addClimbers')
 
+    });
+
+    app.post('/removeClimberFromTeam',isLoggedIn, function(req, res){
+      var reqq = req;
+      allInfo = req.body;
+      console.log(res)
+      console.log(allInfo)
+      Data.findOne({ 'username' :  allInfo.currentUsername }, function(err, user) {
+          if (err) console.log("error")
+          if (user){
+            console.log(user["tier" + allInfo.tier].length)
+            tier = "tier" + allInfo.tier
+            var index = user[tier].indexOf(allInfo.climberId)
+            console.log("index="+index)
+            user[tier].splice(index, 1)
+            user["tierFull" + allInfo.tier] = false;
+            console.log("afterupdating  "+user)
+            Data.findOneAndUpdate(
+              { 'username' :  allInfo.currentUsername },
+            user,
+             function(error,success){
+               if (err){console.log("failed")}
+            });
+          }
+        })
+        res.redirect(307, "/addClimbers")
     });
 
     climbersArray = {
@@ -120,6 +137,9 @@ module.exports = function(app, passport) {
             tier2 : [],
             tier3 : []
           }
+        teamScore = {
+          score: 0
+        }
       Data.findOne({ 'username' :  req.body.currentUsername }, function(err, user) {
           if(err){console.log("shit")}
           else{
@@ -135,15 +155,18 @@ module.exports = function(app, passport) {
 
           setTimeout(function() {
             console.log(climbersArray)
-            res.render('myTeam.ejs', {user:req.user, climber:climbersArray});
+            res.render('myTeam.ejs', {user:req.user, climber:climbersArray, score:teamScore});
           }, 1500)
       })
 
       function findById(id,tier){
           Climber.findById(id, function(err, climber){
             climbersArray[tier].push(climber);
+            teamScore.score += climber.score;
           });
       }
+
+
 
     // =====================================
     // LOGOUT ==============================
@@ -164,7 +187,7 @@ module.exports = function(app, passport) {
     // the callback after google has authenticated the user
     app.get('/auth/google/callback',
             passport.authenticate('google', {
-                    successRedirect : '/profile',
+                    successRedirect : '/addClimbers',
                     failureRedirect : '/'
             }));
 

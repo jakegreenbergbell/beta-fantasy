@@ -1,4 +1,3 @@
-<!-- views/profile.ejs -->
 <!doctype html>
 <html>
 <head>
@@ -6,12 +5,13 @@
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
     <style>
-    body {
-        padding-top:80px;
-        word-wrap:break-word;
-        background-image: url("https://static1.squarespace.com/static/52a24b21e4b0f6168e50748f/57696c616b8f5b5491eda863/57696c75d1758e5e1de43fd9/1466526838883/IFSC_Bouldering_Vail_2016_037.jpg");
-        background-size: cover;
-        }
+        body {
+            padding-top:80px;
+            word-wrap:break-word;
+            background-image: url("https://static1.squarespace.com/static/52a24b21e4b0f6168e50748f/57696c616b8f5b5491eda863/57696c75d1758e5e1de43fd9/1466526838883/IFSC_Bouldering_Vail_2016_037.jpg");
+            background-size: cover;
+            }
+
         .btn-sm{
               margin-top: 4px;
         }
@@ -54,7 +54,7 @@
           background-color: #302F30;
           }
         .header-buttons:hover{
-          color: #ad282a;
+          color: black;
           border-radius: 25px;
           background-color: white;
         }
@@ -70,7 +70,16 @@
           border-radius: 8px;
           background-color: lightblue;
           color: white;
+          display: block;
+          margin: auto;
           }
+          .minusButton{
+            border-radius: 8px;
+            background-color: crimson;
+            color: white;
+            display: block;
+            margin: auto;
+            }
           .scrollable{
             max-height: 300px;
             overflow: scroll;
@@ -91,19 +100,29 @@
     </style>
 </head>
 <body>
+  <% var climbersOnTeam = [];
+     for(var b = 0; b < data["tier1"].length; b++){
+      climbersOnTeam.push(data["tier1"][b])
+     }
+     for(var a = 0; a < data["tier2"].length; a++){
+      climbersOnTeam.push(data["tier2"][a])
+     }
+     for(var c = 0; c < data["tier3"].length; c++){
+      climbersOnTeam.push(data["tier3"][c])
+     }
+  console.log("climb="+climbersOnTeam[0]); %>
+
 
   <% if(user.google.token == undefined){ var email = user.local.email } %>
   <% if (user.google.token !== undefined){  var email = user.google.email }%>
 
+  <!-- <img src="images/background.jpg" height="120%" width="100%" id="background"> -->
 
 
 <div class="container">
   <table class="table table-dark" id="header">
  <tr>
-    <td style="border-top: none"><form method="post" action="/addClimbers">
-              <input type="hidden" name="currentUsername" value="<%= email %>">
-              <input type="submit" value="Add Climbers" class="header-buttons">
-            </form></td>
+    <td style="border-top: none"><button class="header-buttons">Add Climbers</button></td>
     <td style="border-top: none"><form method="post" action="/myTeam">
               <input type="hidden" name="currentUsername" value="<%= email %>">
               <input type="submit" value="My Team" class="header-buttons">
@@ -160,16 +179,25 @@
         <td class="climberTableCell"><%= climber[i].tier %></td>
         <td class="climberTableCell"><%= climber[i].nationality %></td>
         <td class="climberTableCell"><%= climber[i].rank %></td>
+
+        <%if(climbersOnTeam.indexOf(climber[i].id) == -1){%>
+
         <td><form method="post" action="/addClimberToTeam">
           <input type="hidden" name="climberId" value="<%= climber[i]._id %>">
           <input type="hidden" name="tier" value="<%= climber[i].tier %>">
           <input type="hidden" name="currentUsername" value="<%= email %>">
-          <input class="plusButton" type="submit" value="+"
-              <%if(data["tierFull" + climber[i].tier] == true){%>
-                style="background-color:white" disabled
-                <%}%> ></form></td>
-      </tr>
-<% } %>
+          <input class="plusButton" type="submit" value="+">
+          </form></td>
+
+          <% }else{ %>
+            <th><form method="post" action="/removeClimberFromTeam">
+              <input type="hidden" name="climberId" value="<%= climber[i]._id %>">
+              <input type="hidden" name="tier" value="<%= climber[i].tier %>">
+              <input type="hidden" name="currentUsername" value="<%= email %>">
+              <input class="minusButton"type="submit" value="-"></form></th>
+        <% } %>
+      <% } %>
+        </tr>
 </table>
 </div>
 

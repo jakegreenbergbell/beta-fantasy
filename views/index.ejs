@@ -6,8 +6,13 @@
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
     <style>
-        body        { padding-top:80px; }
-        #loginButtons {
+    body {
+        padding-top:80px;
+        word-wrap:break-word;
+        background-image: url("https://static1.squarespace.com/static/52a24b21e4b0f6168e50748f/57696c616b8f5b5491eda863/57696c75d1758e5e1de43fd9/1466526838883/IFSC_Bouldering_Vail_2016_037.jpg");
+        background-size: cover;
+        }
+                #loginButtons {
             right: 10px;
             position: absolute;
             top: 10px;
@@ -15,7 +20,7 @@
         h1{
           position:absolute;
           top: 10px;
-          font-size: 48px;
+          font-size: 64px;
           text-shadow: 2px 2px #ff0000;
         }
         img{
@@ -26,14 +31,30 @@
           z-index: -1;
           top: 0px;
         }
+        #message1{
+          font-style: italic;
+          color: deepskyblue;
+          top: 39%;
+          position: absolute;
+          text-shadow: 4px 8px black;
+          font-size: 62px;
+          text-align: center;
+        }
+        #message2{
+          font-size: 20px;
+          color: white;
+          text-shadow: 2px 2px black;
+          position: absolute;
+          top: 15%;
+        }
+
            </style>
 </head>
 <body>
-<img src="images/background.jpg" height="100%" width="100%" id="background">
 <div class="container">
 
 
-      <h1>Welcome to Beta Fantasy</h1>
+      <h1>Beta Fantasy</h1>
 
         <div id="loginButtons">
 
@@ -42,6 +63,15 @@
 
         <a href="/login" class="btn btn-default"><span class="fa fa-user"></span> Local Login</a>
         <a href="/signup" class="btn btn-default"><span class="fa fa-user"></span> Local Signup</a>
+      </div>
+
+
+      <div id="message1">
+        Welcome to the very first online climbing fantasy game
+      </div>
+
+      <div id="message2">
+        Sign in or create an account to get started
       </div>
 </div>
 </body>

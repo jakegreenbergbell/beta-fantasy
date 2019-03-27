@@ -14,10 +14,12 @@
       height: 100%;
       width: 100%;
     }
-        body {
-            padding-top:80px;
-            word-wrap:break-word;
-              }
+    body {
+        padding-top:80px;
+        word-wrap:break-word;
+        background-image: url("https://static1.squarespace.com/static/52a24b21e4b0f6168e50748f/57696c616b8f5b5491eda863/57696c75d1758e5e1de43fd9/1466526838883/IFSC_Bouldering_Vail_2016_037.jpg");
+        background-size: cover;
+        }
         .btn-sm{
               margin-top: 4px;
         }
@@ -34,13 +36,13 @@
           border-color: white;
         }
         .climberTableCell{
-          padding:15px;
+          padding:11px;
           text-align: center;
         }
         h1{
           position:absolute;
-          top: 100px;
-          font-size: 48px;
+          top: 71px;
+          font-size: 65px;
           text-shadow: 2px 2px #ff0000;
         }
 
@@ -52,7 +54,6 @@
         }
         .header-buttons{
           font-size: 24px;
-          top: 34px;
           position: absolute;
           color: white;
           border-radius: 4px;
@@ -65,7 +66,7 @@
           background-color: white;
         }
         img{
-          height:120%;
+          height:100%;
           width:100%;
           opacity: 0.5;
           position: absolute;
@@ -80,6 +81,8 @@
             border-radius: 8px;
             background-color: crimson;
             color: white;
+            display: block;
+            margin: auto;
             }
           .scrollable{
             max-height: 300px;
@@ -92,18 +95,30 @@
           font-style: italic;
           font-size: 20px;
         }
+        #scoreKeeper{
+          position: absolute;
+          top: 39%;
+          left: 65%;
+          font-size: 30px;
+          border-style: solid;
+          border-radius: 5px;
+          border-color: black;
+          color: white;
+          padding: 20px;
+          text-shadow: 2px 2px red;
+        }
         #tier1Table{
-          top: 133px;
+          top: 113px;
           position: relative;
           left: 10%;
         }
         #tier2Table{
-          top: 171px;
+          top: 142px;
           position: relative;
           left: 10%;
         }
         #tier3Table{
-          top: -122px;
+          top: -45px;
           position: relative;
           left: 55%;
         }
@@ -120,27 +135,32 @@
     </style>
 </head>
 <body>
+  <% if(user.google.token == undefined){ var email = user.local.email } %>
+  <% if (user.google.token !== undefined){  var email = user.google.email }%>
+
 
 <!-- <div style="background-image=url(images/background.jpg)" id="background"><div> -->
-<img src="images/background.jpg" height="100%" width="100%">
 
 
 <div class="container">
   <table class="table table-dark" id="header">
  <tr>
-    <td style="border-top: none"><form method="post" action="/myTeam" class="header-buttons">
-              <input class="plusButton"type="submit" value="My Team"></form></td>
-
-    <td style="border-top: none"><button class="header-buttons">View Climbers</button></td>
-    <td style="border-top: none"><button class="header-buttons">Groups</button></td>
+   <td style="border-top: none"><form method="post" action="/addClimbers">
+             <input type="hidden" name="currentUsername" value="<%= email %>">
+             <input type="submit" value="Add Climbers" class="header-buttons">
+           </form></td>
+   <td style="border-top: none"><form method="post" action="/myTeam">
+             <input type="hidden" name="currentUsername" value="<%= email %>">
+             <input type="submit" value="My Team" class="header-buttons">
+           </form></td>
   </tr>
 </table>
 
-        <h1>Welcome to Beta Fantasy</h1>
+        <h1>Beta Fantasy</h1>
 
 </div>
 
-    <div class="row">
+    <div>
 
         <!-- LOCAL INFORMATION -->
         <% if(user.google.token == undefined){ var email = user.local.email %>
@@ -186,7 +206,7 @@
     <td class="climberTableCell"><%= climber.tier1[i].lastname %></td>
     <td class="climberTableCell"><%= climber.tier1[i].nationality %></td>
     <td class="climberTableCell"><%= climber.tier1[i].rank %></td>
-    <th><form method="post" action="/addClimberToTeam">
+    <th><form method="post" action="/removeClimberFromTeam">
       <input type="hidden" name="climberId" value="<%= climber.tier1[i]._id %>">
       <input type="hidden" name="tier" value="<%= climber.tier1[i].tier %>">
       <input type="hidden" name="currentUsername" value="<%= email %>">
@@ -196,7 +216,7 @@
 <%if(climber.tier1.length < 3){%>
   <tr class="climberRow">
      <td colspan="5"class="climberTableCell">
-       Add <%= 3  - climber.tier1.length  %> more climbers to the tier via the Add Players menu!</td>
+       Add <%= 3  - climber.tier1.length  %> more climbers to the tier via the Add Climbers menu!</td>
    </tr>
 <% } %>
 </table>
@@ -218,7 +238,7 @@
     <td class="climberTableCell"><%= climber.tier2[i].lastname %></td>
     <td class="climberTableCell"><%= climber.tier2[i].nationality %></td>
     <td class="climberTableCell"><%= climber.tier2[i].rank %></td>
-    <th><form method="post" action="/addClimberToTeam">
+    <th><form method="post" action="/removeClimberFromTeam">
       <input type="hidden" name="climberId" value="<%= climber.tier2[i]._id %>">
       <input type="hidden" name="tier" value="<%= climber.tier2[i].tier %>">
       <input type="hidden" name="currentUsername" value="<%= email %>">
@@ -228,7 +248,7 @@
 <%if(climber.tier2.length < 3){%>
   <tr class="climberRow">
      <td colspan="5"class="climberTableCell">
-       Add <%= 3  - climber.tier2.length  %> more climbers to the tier via the Add Players menu!</td>
+       Add <%= 3  - climber.tier2.length  %> more climbers to the tier via the Add Climbers menu!</td>
    </tr>
 <% } %>
 </table>
@@ -250,7 +270,7 @@
     <td class="climberTableCell"><%= climber.tier3[i].lastname %></td>
     <td class="climberTableCell"><%= climber.tier3[i].nationality %></td>
     <td class="climberTableCell"><%= climber.tier3[i].rank %></td>
-    <th><form method="post" action="/addClimberToTeam">
+    <th><form method="post" action="/removeClimberFromTeam">
       <input type="hidden" name="climberId" value="<%= climber.tier3[i]._id %>">
       <input type="hidden" name="tier" value="<%= climber.tier3[i].tier %>">
       <input type="hidden" name="currentUsername" value="<%= email %>">
@@ -260,11 +280,15 @@
     var extraLine = 0;%>
     <tr class="climberRow">
        <td colspan="5"class="climberTableCell">
-         Add <%= 3  - climber.tier3.length  %> more climbers to the tier via the Add Players menu!</td>
+         Add <%= 3  - climber.tier3.length  %> more climbers to the tier via the Add Climbers menu!</td>
      </tr>
     <%}%> ></form></td>
 <% } %>
 </table>
+
+  <div id="scoreKeeper">
+    Your score = <%= score.score %>
+  </div>
 
 </body>
 </html>
