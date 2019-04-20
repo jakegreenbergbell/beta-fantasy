@@ -3,6 +3,7 @@
 var Data            = require('../app/models/data');
 var User            = require('../app/models/user');
 var Climber         = require('../app/models/climber');
+var League = require ('../app/models/league')
 
 module.exports = function(app, passport) {
 
@@ -166,7 +167,30 @@ module.exports = function(app, passport) {
           });
       }
 
+      app.post('/leagues', function(req, res){
+        user_master = req.user.local.email || req.user.google.email
+        allInfo = req.body;
+        var userData = true;
+        Data.findOne({ 'username' :  allInfo.currentUsername }, function(err, user) {
+            userData = user;
+        Climber.find({}, function(err, climber) {
+          // console.log("user=" + req.user)
+          // console.log("climber=" + climber)
+          // console.log("userData=" + userData)
+          res.render("leagues.ejs", {user:req.user, climber:climber, data:userData})
+          })
+        })
+      });
 
+      app.post('/createLeague', function(req, res){
+        console.log(req.body);
+        League.create({ name: req.body.name,
+                        password: req.body.password}, function (err, newLeagueData) {
+          if (err) return handleError(err);
+          else return "Success"
+        });
+        res.redirect('/leagues', 307);
+      })
 
     // =====================================
     // LOGOUT ==============================

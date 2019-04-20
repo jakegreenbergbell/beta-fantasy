@@ -1,0 +1,241 @@
+<!doctype html>
+<html>
+<head>
+    <title>Beta Fantasy</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script>
+      function myLeagues(){
+        $("#myLeagues").css("display", "block");
+        $("#joinLeagues").css("display", "none");
+      }
+
+      function joinLeagues(){
+        $("#myLeagues").css("display", "none");
+        $("#joinLeagues").css("display", "block");
+      }
+    </script>
+    <style>
+        body {
+            padding-top:80px;
+            word-wrap:break-word;
+            background-image: url("https://static1.squarespace.com/static/52a24b21e4b0f6168e50748f/57696c616b8f5b5491eda863/57696c75d1758e5e1de43fd9/1466526838883/IFSC_Bouldering_Vail_2016_037.jpg");
+            background-size: cover;
+            }
+
+        .btn-sm{
+              margin-top: 4px;
+        }
+        #climbers{
+          position: absolute;
+          top: 250px;
+          left: 150px;
+          border-style: solid;
+          border-color: white;
+          background-color: rgba(255,255,255, 0.6);
+        }
+        .climberRow{
+          padding:15px;
+          border-style: solid;
+          border-color: white;
+        }
+        .climberTableCell{
+          padding:15px;
+          text-align: center;
+        }
+        h1{
+          position:absolute;
+          top: 100px;
+          font-size: 64px;
+          text-shadow: 2px 2px #ff0000;
+        }
+
+        #header{
+          position: absolute;
+          top: 10px;
+          border-top: none;
+          width: 61%;
+        }
+        .header-buttons{
+          font-size: 24px;
+          top: 34px;
+          position: absolute;
+          color: white;
+          border-radius: 4px;
+          transition: 0.65s;
+          background-color: #302F30;
+          }
+        .header-buttons:hover{
+          color: black;
+          border-radius: 25px;
+          background-color: white;
+        }
+        img{
+          height:100%;
+          width:100%;
+          opacity: 0.5;
+          position: absolute;
+          z-index: -1;
+          top: 0px;
+        }
+        #joinLeaguesButton{
+          position: absolute;
+          top: 38%;
+          left: 35%;
+        }
+        .plusButton{
+          border-radius: 8px;
+          background-color: lightblue;
+          color: white;
+          display: block;
+          margin: auto;
+          }
+          .leagueBox{
+            border-radius: 5px;
+            background-color: rgba(255,255,255, 0.6);
+            margin-top: 5px;
+
+          }
+          .minusButton{
+            border-radius: 8px;
+            background-color: crimson;
+            color: white;
+            display: block;
+            margin: auto;
+            }
+            #myLeaguesButton{
+              position: absolute;
+              top: 38%;
+              left: 15%;
+            }
+            #newLeague{
+              position: absolute;
+              right: 10px;
+              top: 220px;
+              width: 206px;
+              margin-top: 4px;
+            }
+          .scrollable{
+            max-height: 300px;
+            overflow: scroll;
+          }
+        .text-danger  {
+          margin: 0px;
+        }
+        .well{
+          position: absolute;
+          right: 10px;
+          top: 30px;
+          padding: 10px;
+          background-color: transparent;
+          max-width: 250px;
+         border: 4px solid #e3e3e3;
+         background-color: rgba(255,255,255, 0.6);
+       }
+
+    </style>
+</head>
+<body>
+  <% var climbersOnTeam = [];
+      if(data["tier1"]){
+          for(var b = 0; b < data["tier1"].length; b++){
+              climbersOnTeam.push(data["tier1"][b])
+          }
+     for(var a = 0; a < data["tier2"].length; a++){
+      climbersOnTeam.push(data["tier2"][a])
+     }
+     for(var c = 0; c < data["tier3"].length; c++){
+      climbersOnTeam.push(data["tier3"][c])
+     }
+   }
+  console.log("climb="+climbersOnTeam[0]); %>
+
+
+  <% if(user.google.token == undefined){ var email = user.local.email } %>
+  <% if (user.google.token !== undefined){  var email = user.google.email }%>
+
+  <!-- <img src="images/background.jpg" height="120%" width="100%" id="background"> -->
+
+
+<div class="container">
+  <table class="table table-dark" id="header">
+ <tr>
+   <td style="border-top: none"><form method="post" action="/addClimbers">
+             <input type="hidden" name="currentUsername" value="<%= email %>">
+             <input type="submit" value="Add Climbers" class="header-buttons">
+           </form></td>
+    <td style="border-top: none"><form method="post" action="/myTeam">
+              <input type="hidden" name="currentUsername" value="<%= email %>">
+              <input type="submit" value="My Team" class="header-buttons">
+            </form></td>
+  <td style="border-top: none"><form method="post" action="/leagues">
+            <input type="hidden" name="currentUsername" value="<%= email %>">
+            <input type="submit" value="Leagues" class="header-buttons">
+          </form></td>
+  </tr>
+</table>
+        <h1>Beta Fantasy</h1>
+</div>
+
+    <div class="row">
+
+        <!-- LOCAL INFORMATION -->
+        <% if(user.google.token == undefined){ var email = user.local.email %>
+            <div class="well">
+                <h3><span class="fa fa-user"></span> Signed In</h3>
+
+                    <p>
+                        <strong>username</strong>: <%= user.local.email %><br>
+                        <a href="/logout" class="btn btn-default btn-sm">Logout</a><br>
+                    </p>
+
+            </div>
+        <% } %>
+
+    <!-- GOOGLE INFORMATION -->
+    <% if (user.google.token !== undefined){  var email = user.google.email %>
+
+        <div class="well">
+            <h3 class="text-danger"><span class="fa fa-google-plus"></span> Google</h3>
+
+                <p>
+                    <strong>email</strong>: <%= user.google.email %><br>
+                    <strong>name</strong>: <%= user.google.name %>
+                    <a href="/logout" class="btn btn-default btn-sm">Logout</a><br>
+                </p>
+
+        </div>
+        <% } %>
+<div id="newLeague">
+        <form method="post" action="/createLeague">
+                  <input type="text" class="leagueBox" name="name" placeholder="League Name">
+                  <input type="text" class="leagueBox" name="password" placeholder="Password">
+                  <input type="hidden" name="currentUsername" value="<%= email %>">
+                  <input type="submit" class="leagueBox" value="Create & Join">
+                </form>
+</div>
+
+<div id="myLeaguesButton">
+  <button onclick="myLeagues()">My Leagues</button>
+  </div>
+
+<div id="joinLeaguesButton">
+  <button onclick="joinLeagues()">Join Leagues</button>
+  </div>
+
+
+<div  id="myLeagues" style="display:block;">
+  Check1
+  </div>
+
+<div id="joinLeagues" style="display:none;">
+  Check 2
+  </div>
+
+
+</div>
+
+
+</body>
+</html>

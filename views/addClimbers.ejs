@@ -21,6 +21,7 @@
           left: 150px;
           border-style: solid;
           border-color: white;
+          background-color: rgba(255,255,255, 0.6);
         }
         .climberRow{
           padding:15px;
@@ -95,21 +96,24 @@
           background-color: transparent;
           max-width: 250px;
          border: 4px solid #e3e3e3;
+         background-color: rgba(255,255,255, 0.6);
        }
 
     </style>
 </head>
 <body>
   <% var climbersOnTeam = [];
-     for(var b = 0; b < data["tier1"].length; b++){
-      climbersOnTeam.push(data["tier1"][b])
-     }
+      if(data["tier1"]){
+          for(var b = 0; b < data["tier1"].length; b++){
+              climbersOnTeam.push(data["tier1"][b])
+          }
      for(var a = 0; a < data["tier2"].length; a++){
       climbersOnTeam.push(data["tier2"][a])
      }
      for(var c = 0; c < data["tier3"].length; c++){
       climbersOnTeam.push(data["tier3"][c])
      }
+   }
   console.log("climb="+climbersOnTeam[0]); %>
 
 
@@ -122,11 +126,18 @@
 <div class="container">
   <table class="table table-dark" id="header">
  <tr>
-    <td style="border-top: none"><button class="header-buttons">Add Climbers</button></td>
+   <td style="border-top: none"><form method="post" action="/addClimbers">
+             <input type="hidden" name="currentUsername" value="<%= email %>">
+             <input type="submit" value="Add Climbers" class="header-buttons">
+           </form></td>
     <td style="border-top: none"><form method="post" action="/myTeam">
               <input type="hidden" name="currentUsername" value="<%= email %>">
               <input type="submit" value="My Team" class="header-buttons">
             </form></td>
+  <td style="border-top: none"><form method="post" action="/leagues">
+            <input type="hidden" name="currentUsername" value="<%= email %>">
+            <input type="submit" value="Leagues" class="header-buttons">
+          </form></td>
   </tr>
 </table>
         <h1>Beta Fantasy</h1>
