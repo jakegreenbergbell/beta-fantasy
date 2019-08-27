@@ -15,6 +15,37 @@
         $("#myLeagues").css("display", "none");
         $("#joinLeagues").css("display", "block");
       }
+
+      function joinLeaguePw(which){
+        console.log(which)
+        console.log($("#password"+which).val())
+        if($('#password' + which).val() == $("#correctPassword"+which).val()){
+          var obj = {
+            password:$("#password"+which).val(),
+            correctPassword: $("#correctPassword"+which).val(),
+            leagueId: $("#leagueId"+which).val(),
+            username: $("#username"+which).val()
+          }
+          $.post("http://localhost:3000/joinLeague", obj, function(data){
+              console.log("success?")
+          });
+        }else{
+          alert("Incorrect password please try again")
+        }
+      }
+
+        function wrongPassword(data){
+          console.log("successFunction")
+          console.log(data)
+          if(data == "alert"){
+            alert("Incorrect Password")
+          }else{
+            console.log("success")
+          }
+
+        }
+
+
     </script>
     <style>
         body {
@@ -80,9 +111,15 @@
           top: 0px;
         }
         #joinLeaguesButton{
-          position: absolute;
-          top: 38%;
-          left: 35%;
+          position: relative;
+          top: 118px;
+          left: 600px;
+        }
+        #joinLeagueBox{
+          position: relative;
+          top: 185px;
+          left: 600px;
+          background-color: rgba(255,255,255, 0.6);
         }
         .plusButton{
           border-radius: 8px;
@@ -105,9 +142,9 @@
             margin: auto;
             }
             #myLeaguesButton{
-              position: absolute;
-              top: 38%;
-              left: 15%;
+              position: relative;
+              top: 150px;
+              left: 300px;
             }
             #newLeague{
               position: absolute;
@@ -137,20 +174,6 @@
     </style>
 </head>
 <body>
-  <% var climbersOnTeam = [];
-      if(data["tier1"]){
-          for(var b = 0; b < data["tier1"].length; b++){
-              climbersOnTeam.push(data["tier1"][b])
-          }
-     for(var a = 0; a < data["tier2"].length; a++){
-      climbersOnTeam.push(data["tier2"][a])
-     }
-     for(var c = 0; c < data["tier3"].length; c++){
-      climbersOnTeam.push(data["tier3"][c])
-     }
-   }
-  console.log("climb="+climbersOnTeam[0]); %>
-
 
   <% if(user.google.token == undefined){ var email = user.local.email } %>
   <% if (user.google.token !== undefined){  var email = user.google.email }%>
@@ -216,12 +239,12 @@
                 </form>
 </div>
 
-<div id="myLeaguesButton">
-  <button onclick="myLeagues()">My Leagues</button>
+<div>
+  <button id="myLeaguesButton" style="font-size:20px;" onclick="myLeagues()">My Leagues</button>
   </div>
 
-<div id="joinLeaguesButton">
-  <button onclick="joinLeagues()">Join Leagues</button>
+<div>
+  <button id="joinLeaguesButton" id style="font-size:20px;" onclick="joinLeagues()">Join Leagues</button>
   </div>
 
 
@@ -230,7 +253,29 @@
   </div>
 
 <div id="joinLeagues" style="display:none;">
-  Check 2
+    <table id="joinLeagueBox">
+      <tr class="climberRow scrollable">
+        <th class="climberTableCell">Name</th>
+        <th class="climberTableCell">Members</th>
+        <th class="climberTableCell">Password</th>
+        <th class="climberTableCell">Join</th>
+      </tr>
+      <%for(var i = 0; i<league.length;i++){ %>
+      <tr class="climberRow scrollable">
+         <td class="climberTableCell"><%= league[i].name %></td>
+         <td class="climberTableCell"><%= league[i].members.length + "/10" %></td>
+         <!-- <form method="post" action="/joinLeague"> -->
+         <td class="climberTableCell"><input type="password" id="password<%=[i]%>"  name="password"></td>
+         <input type="hidden" name="correctPassword" id="correctPassword<%=[i]%>" value="<%= league[i].password %>">
+         <input type="hidden" name="leagueId" id="leagueId<%=[i]%>" value="<%= league[i].id %>">
+         <input type="hidden" name="username" id="username<%=[i]%>" value="<%= email%>">
+         <td class="climberTableCell"><button onclick="joinLeaguePw(<%=[i]%>)">Submit</button>
+         <!-- </form> -->
+       </td>
+
+      </tr>
+      <% } %>
+    </table>
   </div>
 
 

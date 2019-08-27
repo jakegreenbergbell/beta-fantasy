@@ -171,19 +171,23 @@ module.exports = function(app, passport) {
         user_master = req.user.local.email || req.user.google.email
         allInfo = req.body;
         var userData = true;
+        var climberData = true;
         Data.findOne({ 'username' :  allInfo.currentUsername }, function(err, user) {
             userData = user;
-        Climber.find({}, function(err, climber) {
-          // console.log("user=" + req.user)
-          // console.log("climber=" + climber)
-          // console.log("userData=" + userData)
-          res.render("leagues.ejs", {user:req.user, climber:climber, data:userData})
-          })
+            Climber.find({}, function(err, climber) {
+                climberData = climber;
+              League.find({}, function(err, league){
+                var password = {
+                  false : false
+                }
+                  res.render("leagues.ejs", {user:req.user, climber:climberData, data:userData, league:league, password: password})
+              })
+            })
         })
       });
 
       app.post('/createLeague', function(req, res){
-        console.log(req.body);
+        console.log("from server" + req.body);
         League.create({ name: req.body.name,
                         password: req.body.password}, function (err, newLeagueData) {
           if (err) return handleError(err);
@@ -191,6 +195,33 @@ module.exports = function(app, passport) {
         });
         res.redirect('/leagues', 307);
       })
+
+      app.post('/joinLeague', function(req,res){
+        console.log(req.body);
+        console.log("body" + JSON.stringify(req.body))
+        var info = req.body;
+        Data.findOne({"username":info.username}, function(req, user){
+            user.groups.push(info.leagueId);
+            Data.findOneAndUpdate({"username":info.username}, user, function(error,success){
+               if (error){console.log("failed")}
+               else console.log(success)
+              });
+          })
+        League.findById(info.leagueId, function(err, league){
+          league.members.push(info.username);
+          league.memberAmount += 1;
+          if(league.memberAmount == 10){
+            league.groupFull = full;
+          }
+          console.log("before update=" + league)
+          League.findOneAndUpdate({"_id":info.leagueId}, league, function(error, doc){
+            if (error){console.log("failed")}
+            console.log(doc)
+          })
+        });
+            res.redirect('/leagues', 307)
+        })
+
 
     // =====================================
     // LOGOUT ==============================

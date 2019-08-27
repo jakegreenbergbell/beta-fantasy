@@ -15,18 +15,19 @@
         .btn-sm{
               margin-top: 4px;
         }
-        #climbers{
+        .climbers{
           position: absolute;
           top: 250px;
           left: 150px;
           border-style: solid;
           border-color: white;
           background-color: rgba(255,255,255, 0.6);
-        }
-        .climberRow{
-          padding:15px;
-          border-style: solid;
-          border-color: white;
+          display: block;
+          overflow:  auto;
+          height: 41%;
+          width: 555px;
+          table-layout: fixed;
+          border-collapse: collapse;
         }
         .climberTableCell{
           padding:15px;
@@ -81,10 +82,11 @@
             display: block;
             margin: auto;
             }
-          .scrollable{
+          #scrolltable{
             max-height: 300px;
             overflow: scroll;
           }
+
         .text-danger  {
           margin: 0px;
         }
@@ -172,9 +174,9 @@
 
         </div>
 <% } %>
-<div>
-  <table id="climbers">
-    <tr class="climberRow">
+<div id="scrolltable">
+  <table class="climbers">
+    <tr>
       <th class="climberTableCell">First name</th>
       <th class="climberTableCell">Last name</th>
       <th class="climberTableCell">Tier</th>
@@ -182,9 +184,8 @@
       <th class="climberTableCell">2018 ranking</th>
       <th class="climberTableCell">Add</th>
     </tr>
-
     <%for(var i = 0; i<climber.length;i++){ %>
-     <tr class="climberRow scrollable">
+     <tr>
         <td class="climberTableCell"><%= climber[i].firstname %></td>
         <td class="climberTableCell"><%= climber[i].lastname %></td>
         <td class="climberTableCell"><%= climber[i].tier %></td>

@@ -7,7 +7,7 @@ var leagueSchema = mongoose.Schema ({
         password: String,
         members: {type:Array, default: []},
         memberAmount : Number,
-        groupFull : Boolean,
+        groupFull : {type:Boolean, default:false}
 });
 
 
