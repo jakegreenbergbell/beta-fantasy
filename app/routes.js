@@ -187,38 +187,56 @@ module.exports = function(app, passport) {
       });
 
       app.post('/createLeague', function(req, res){
-        console.log("from server" + req.body);
+        var allInfo = req.body;
         League.create({ name: req.body.name,
-                        password: req.body.password}, function (err, newLeagueData) {
+                        password: req.body.password,
+                        members: [req.body.currentUsername]
+                      }, function (err, newLeagueData) {
           if (err) return handleError(err);
-          else return "Success"
+          else
+          var newLeagueInfo = newLeagueData;
+          console.log("id= " + newLeagueInfo.id);
+          var id = newLeagueInfo.id;
+          Data.findOne({"username":allInfo.currentUsername}, function(req,user){
+            user.groups.push(id);
+            Data.findOneAndUpdate({"username":allInfo.currentUsername}, user, function(error,success){
+               if (error){console.log("failed")}
+               else console.log(success)
+              });
+          })
         });
         res.redirect('/leagues', 307);
       })
 
       app.post('/joinLeague', function(req,res){
-        console.log(req.body);
-        console.log("body" + JSON.stringify(req.body))
+        //making the body info easier to use and usable throughout whole function
         var info = req.body;
+        //first the group id is added to the users data
         Data.findOne({"username":info.username}, function(req, user){
-            user.groups.push(info.leagueId);
-            Data.findOneAndUpdate({"username":info.username}, user, function(error,success){
-               if (error){console.log("failed")}
-               else console.log(success)
-              });
-          })
-        League.findById(info.leagueId, function(err, league){
-          league.members.push(info.username);
-          league.memberAmount += 1;
-          if(league.memberAmount == 10){
-            league.groupFull = full;
+          //check if user is already in group
+          if(user.groups.indexOf(info.leagueId) == -1){
+                user.groups.push(info.leagueId);
+                Data.findOneAndUpdate({"username":info.username}, user, function(error,success){
+                   if (error){console.log("failed")}
+                   else console.log(success)
+                  });
+            //then the users data is added to the league
+            League.findById(info.leagueId, function(err, league){
+              league.members.push(info.username);
+              league.memberAmount += 1;
+              if(league.memberAmount == 10){
+                league.groupFull = full;
+              }
+              console.log("before update=" + league)
+              League.findOneAndUpdate({"_id":info.leagueId}, league, function(error, doc){
+                if (error){console.log("failed")}
+                console.log("succesfully added user data to league")
+              })
+            });
+        } else {
+            console.log("user has already joined this league")
           }
-          console.log("before update=" + league)
-          League.findOneAndUpdate({"_id":info.leagueId}, league, function(error, doc){
-            if (error){console.log("failed")}
-            console.log(doc)
           })
-        });
             res.redirect('/leagues', 307)
         })
 

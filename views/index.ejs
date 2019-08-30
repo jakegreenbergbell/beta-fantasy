@@ -6,13 +6,23 @@
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
     <style>
-    body {
+        #background{
+            /* The image used */
+            background-image: url("https://www.insidethegames.biz/media/image/118251/o/RyBheRQwcllkjRZj");
+
+            /* Full height */
+            height: 100%;
+
+            /* Center and scale the image nicely */
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        body {
         padding-top:80px;
         word-wrap:break-word;
-        background-image: url("https://static1.squarespace.com/static/52a24b21e4b0f6168e50748f/57696c616b8f5b5491eda863/57696c75d1758e5e1de43fd9/1466526838883/IFSC_Bouldering_Vail_2016_037.jpg");
-        background-size: cover;
         }
-                #loginButtons {
+        #loginButtons {
             right: 10px;
             position: absolute;
             top: 10px;
@@ -34,18 +44,20 @@
         #message1{
           font-style: italic;
           color: deepskyblue;
-          top: 39%;
-          position: absolute;
+          top: 100px;
+          position: relative;
           text-shadow: 4px 8px black;
           font-size: 62px;
           text-align: center;
         }
-        #message2{
+        #steps{
           font-size: 20px;
           color: white;
+          top: 200px;
+          font-size: 35px;
+          position: relative;
           text-shadow: 2px 2px black;
-          position: absolute;
-          top: 15%;
+          text-align: center;
         }
 
            </style>
@@ -53,7 +65,7 @@
 <body>
 <div class="container">
 
-
+      <div id="background"></div>
       <h1>Beta Fantasy</h1>
 
         <div id="loginButtons">
@@ -69,9 +81,11 @@
       <div id="message1">
         Welcome to the very first online climbing fantasy game
       </div>
-
-      <div id="message2">
-        Sign in or create an account to get started
+      <div id="steps">
+        Step 1: Create an account or log in!
+        <br>Step 2: Add climbers to make a team!
+        <br>Step 3: Create or join a league, or just play by yourself!
+        <br>Step 4: Nothing else....it's really that easy!
       </div>
 </div>
 </body>

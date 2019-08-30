@@ -5,8 +5,8 @@ var bcrypt   = require('bcrypt');
 var leagueSchema = mongoose.Schema ({
         name : String,
         password: String,
-        members: {type:Array, default: []},
-        memberAmount : Number,
+        members: Array,
+        memberAmount : {type:Number, default: 1},
         groupFull : {type:Boolean, default:false}
 });
 
