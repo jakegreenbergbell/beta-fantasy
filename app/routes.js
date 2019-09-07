@@ -167,13 +167,31 @@ module.exports = function(app, passport) {
           });
       }
 
+      // app.post('/leagues', function(req, res){
+      //   user_master = req.user.local.email || req.user.google.email
+      //   allInfo = req.body;
+      //   var userData = true;
+      //   var climberData = true;
+      //   Data.findOne({ 'username' :  allInfo.currentUsername }, function(err, user) {
+      //       Climber.find({}, function(err, climber) {
+      //           climberData = climber;
+      //         League.find({}, function(err, league){
+      //           var password = {
+      //             false : false
+      //           }
+      //             res.render("leagues.ejs", {user:req.user, climber:climberData, data:userData, league:league, password: password})
+      //         })
+      //       })
+      //   })
+      // });
+
       app.post('/leagues', function(req, res){
         user_master = req.user.local.email || req.user.google.email
         allInfo = req.body;
         var userData = true;
         var climberData = true;
+        var usersLeagues = [];
         Data.findOne({ 'username' :  allInfo.currentUsername }, function(err, user) {
-            userData = user;
             Climber.find({}, function(err, climber) {
                 climberData = climber;
               League.find({}, function(err, league){
@@ -184,7 +202,83 @@ module.exports = function(app, passport) {
               })
             })
         })
-      });
+      })
+
+        app.post('/leaguetotaltest', function(req,res){
+          user_master = req.user.local.email || req.user.google.email
+          allInfo = req.body;
+          var userData = true;
+          var climberData = true;
+            var initializePromise = promise1();
+            initializePromise.then(function(result) {
+                userDetails = result;
+                console.log(result);
+                // Use user details from here
+                return userDetails;
+            }, function(err) {
+                console.log(err);
+            }).then(function(result) {
+                var leagueIds = [];
+                for(var i = 0; i < result.groups.length(); i++){
+                    leagueIds.push(result.groups[i]);
+                }
+            }).then(function(result, leagueIds){
+              promise2();
+            }).then(function(result2){
+              console.log("result2" + result2);
+            })
+          function promise1() {
+
+              // Return new promise
+              return new Promise(function(resolve, reject) {
+               // Do async job
+               Data.findOne({ 'username' :  allInfo.currentUsername }, function(err, user) {
+                if (err) {
+                          reject(err);
+                      } else {
+                          resolve(user);
+                      }
+                  })
+              })
+          }
+          function promise2(result, leagueIds){
+            // Return new promise
+            return new Promise(function(resolve, reject) {
+             // Do async job
+             var memberIds = [];
+             for(var i= 0; i<leagueIds.length(); i++){
+               League.findOne({ 'username' :  leagueIds[i] }, function(err, league) {
+                  if(err){ reject(err);
+                  }else{
+                 for(var j=0; j<league.members.length; j++){
+                  memberIds.push(league.members[j]);
+                 }
+                 resolve(memberIds);
+                }
+              })
+             }
+
+              })
+            }
+          })
+        //   // var query = Data.findOne({ 'username' :  allInfo.currentUsername });
+        //   //     query.select('leagues');
+        //   //     console.log(query);
+        //       // for(var i = 0; i < userData.leagues.length(); i++){
+        //       //   League.findById(userData.leagues[i], function(req,user){
+        //       //
+        //       //   })
+        //       // }
+        //       Climber.find({}, function(err, climber) {
+        //           climberData = climber;
+        //         League.find({}, function(err, league){
+        //           var password = {
+        //             false : false
+        //           }
+        //             res.render("leagues.ejs", {user:req.user, climber:climberData, data:userData, league:league, password: password})
+        //         })
+        //       })
+        // })
 
       app.post('/createLeague', function(req, res){
         var allInfo = req.body;
