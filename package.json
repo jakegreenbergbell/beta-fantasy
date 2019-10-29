@@ -19,7 +19,7 @@
     "express": "^4.13.3",
     "express-session": "^1.15.6",
     "flash": "^1.1.0",
-    "mongoose": "^5.4.19",
+    "mongoose": "^5.7.5",
     "morgan": "^1.9.1",
     "nodemon": "^1.18.10",
     "passport": "^0.2.2",
